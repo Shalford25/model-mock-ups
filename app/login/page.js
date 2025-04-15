@@ -1,25 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import { verifyUser } from "../service/AccountRoutes"; // Import the verifyUser function
+import { useState, useContext } from "react";
+import { useRouter } from "next/navigation";
+import { MyContext } from "../components/MyContext";
+import { verifyUser } from "../service/AccountRoutes";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useContext(MyContext);
+  const router = useRouter();
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Call the verifyUser function directly
+      // Authenticate the user
       const user = await verifyUser(username, password);
 
-      alert("Login successful!");
-      console.log("User data:", user);
-      // Redirect or handle successful login
+      // Log the user into the context
+      login({ username: user.username, role: user.role });
+
+      // Redirect to the home page
+      router.push("/");
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Login failed. Please try again.");
     }
   };
 

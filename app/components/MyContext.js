@@ -7,7 +7,6 @@ export const MyContext = React.createContext();
 
 export function Provider({ children }) {
   const [cart, setCart] = useState(() => {
-    // Initialize the cart from sessionStorage
     if (typeof window !== "undefined") {
       const storedCart = sessionStorage.getItem("cart");
       return storedCart ? JSON.parse(storedCart) : [];
@@ -15,21 +14,35 @@ export function Provider({ children }) {
     return [];
   });
 
-  // Update sessionStorage whenever the cart changes
+  const [account, setAccount] = useState(() => {
+    if (typeof window !== "undefined") {
+      const storedAccount = sessionStorage.getItem("account");
+      return storedAccount ? JSON.parse(storedAccount) : null;
+    }
+    return null;
+  });
+
   useEffect(() => {
     sessionStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    if (account) {
+      sessionStorage.setItem("account", JSON.stringify(account));
+    } else {
+      sessionStorage.removeItem("account");
+    }
+  }, [account]);
 
   const addToCart = (item) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
       if (existingItem) {
-        const updatedCart = prevCart.map((cartItem) =>
+        return prevCart.map((cartItem) =>
           cartItem.id === item.id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
-        return updatedCart;
       } else {
         return [...prevCart, { ...item, quantity: 1 }];
       }
@@ -48,8 +61,32 @@ export function Provider({ children }) {
     setCart([]);
   };
 
+  const login = (user) => {
+    setAccount(user);
+  };
+
+  const logout = () => {
+    setAccount(null);
+    clearCart();
+  };
+
+  const hasRole = (role) => {
+    return account?.role === role;
+  };
+
   return (
-    <MyContext.Provider value={{ cart, addToCart, updateCartQuantity, clearCart }}>
+    <MyContext.Provider
+      value={{
+        cart,
+        addToCart,
+        updateCartQuantity,
+        clearCart,
+        account,
+        login,
+        logout,
+        hasRole,
+      }}
+    >
       {children}
     </MyContext.Provider>
   );
