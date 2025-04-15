@@ -72,3 +72,17 @@ export async function updateInventoryItem(id, name, description, imagelink, pric
     client.release();
   }
 }
+
+export async function updateInventoryQuantity(id, quantityChange) {
+  const client = await pool.connect();
+
+  try {
+    // Update only the quantity column by adding the quantityChange
+    await client.query(
+      `UPDATE Inventory SET quantity = quantity + $1 WHERE id = $2`,[quantityChange, id]
+    );
+    return { message: "Quantity updated successfully" };
+  } finally {
+    client.release();
+  }
+}

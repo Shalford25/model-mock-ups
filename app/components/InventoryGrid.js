@@ -1,8 +1,12 @@
 "use client";
 
+import { useContext } from "react";
+import { MyContext } from "./MyContext";
 import Link from "next/link";
 
 export default function InventoryGrid({ inventory }) {
+  const { addToCart } = useContext(MyContext);
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-8">
       {inventory.map((item) => (
@@ -21,12 +25,17 @@ export default function InventoryGrid({ inventory }) {
             </h2>
           </Link>
           <p className="text-gray-700">${Number(item.price).toFixed(2)}</p>
-          <button
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            onClick={() => alert("Purchase functionality coming soon!")}
-          >
-            Purchase
-          </button>
+          <p className="text-gray-600">Available: {item.quantity}</p>
+          {item.quantity > 0 ? (
+            <button
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              onClick={() => addToCart(item)}
+            >
+              Add to Cart
+            </button>
+          ) : (
+            <p className="mt-4 text-red-500 font-bold">Out of Stock</p>
+          )}
         </div>
       ))}
     </div>

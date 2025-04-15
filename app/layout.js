@@ -4,7 +4,7 @@ import {Provider} from "./components/MyContext";
 
 export default function RootLayout({children}) {
   return (
-    <html lang="en">
+    <html lang="en"  data-lt-installed="true">
       <body className="bg-background text-foreground min-h-screen">
         <Provider>
           <NavBar/>
