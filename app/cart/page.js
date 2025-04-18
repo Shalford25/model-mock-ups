@@ -5,7 +5,7 @@ import { MyContext } from "../components/MyContext";
 import { updateInventoryQuantity } from "../service/InventoryRoutes";
 
 export default function CartPage() {
-  const { cart, updateCartQuantity, clearCart } = useContext(MyContext);
+  const { cart, updateCartQuantity, clearCart, removeFromCart } = useContext(MyContext);
 
   const handlePurchase = async () => {
     try {
@@ -49,6 +49,12 @@ export default function CartPage() {
                   className="ml-2 border rounded px-2 py-1"
                 />
               </label>
+              <button
+                className="ml-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                onClick={() => removeFromCart(item.id)} // Remove item from cart
+              >
+                Remove
+              </button>
             </div>
           ))}
           <button

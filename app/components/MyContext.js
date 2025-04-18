@@ -64,6 +64,10 @@ export function Provider({ children }) {
   const login = (user) => {
     setAccount(user);
   };
+  
+  const removeFromCart = (id) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+  };
 
   const logout = () => {
     setAccount(null);
@@ -81,6 +85,7 @@ export function Provider({ children }) {
         addToCart,
         updateCartQuantity,
         clearCart,
+        removeFromCart,
         account,
         login,
         logout,
