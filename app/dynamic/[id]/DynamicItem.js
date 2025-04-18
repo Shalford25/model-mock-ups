@@ -6,7 +6,7 @@ export default function DynamicItem({ item }) {
       <img
         src={item.imagelink}
         alt={item.name}
-        className="w-full h-64 object-cover mb-4"
+        className="vw-100 vh-100 object-cover mb-4"
       />
       <h1 className="text-2xl font-bold mb-2">{item.name}</h1>
       <p className="text-gray-700 mb-4">${Number(item.price).toFixed(2)}</p>
