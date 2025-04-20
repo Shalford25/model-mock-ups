@@ -1,19 +1,41 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { MyContext } from "./MyContext";
 
 export default function NavBar() {
-  const { account, logout, cart } = useContext(MyContext); // Include cart to track changes
-  const [menuOpen, setMenuOpen] = useState(false); // State to toggle dropdown menu
+  const { account, logout, cart } = useContext(MyContext);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="fixed top-0 left-0 w-full grid grid-cols-6 bg-blue-400 text-2xl px-5 py-5 shadow-md z-50">
-      <div><a href="/">Home</a></div>
+      <div>
+        <a href="/">
+          <img
+            src="/icons/icon.png" 
+            alt="Home"
+            className="h-12 w-auto"
+          />
+        </a>
+      </div>
       <div className="col-span-5 flex justify-end items-center relative">
         {account?.role === "user" && (
           <div className="flex items-center mr-6">
@@ -47,7 +69,10 @@ export default function NavBar() {
         </div>
 
         {menuOpen && (
-          <div className="absolute top-14 right-0 bg-white shadow-lg rounded-lg w-48 text-base">
+          <div
+            ref={dropdownRef}
+            className="absolute top-14 right-0 bg-white shadow-lg rounded-lg w-48 text-base"
+          >
             {account?.role === "admin" && (
               <a
                 href="/business"
@@ -61,6 +86,9 @@ export default function NavBar() {
               className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
             >
               About Us
+            </a>
+            <a href="/register" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">
+              Register
             </a>
             {!account ? (
               <a

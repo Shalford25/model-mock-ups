@@ -51,8 +51,8 @@ export default function RegisterPage() {
       <h1>Register</h1>
       <form onSubmit={handleRegisterSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
-          <input
+          <label htmlFor="username">Username: </label>
+          <input className="border-2 rounded px-2 py-1"
             type="text"
             id="username"
             value={username}
@@ -61,8 +61,8 @@ export default function RegisterPage() {
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
-          <input
+          <label htmlFor="password">Password: </label>
+          <input className="border-2 rounded px-2 py-1"
             type="password"
             id="password"
             value={password}
@@ -71,8 +71,8 @@ export default function RegisterPage() {
           />
         </div>
         <div>
-          <label htmlFor="email">Email:</label>
-          <input
+          <label htmlFor="email">Email: </label>
+          <input className="border-2 rounded px-2 py-1"
             type="email"
             id="email"
             value={email}
@@ -80,9 +80,10 @@ export default function RegisterPage() {
             required
           />
         </div>
+        <br></br>
         {error && <p style={{ color: "red" }}>{error}</p>}
         {success && <p style={{ color: "green" }}>{success}</p>}
-        <button type="submit">Register</button>
+        <button className="border-2 rounded px-2 py-1" type="submit">Register</button>
       </form>
     </div>
   );
