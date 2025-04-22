@@ -86,3 +86,19 @@ export async function updateInventoryQuantity(id, quantityChange) {
     client.release();
   }
 }
+
+export async function getInventoryBySearch(query) {
+  const client = await pool.connect();
+
+  try {
+    const result = await client.query(
+      `SELECT id, name, description, imagelink, CAST(price AS FLOAT) AS price, quantity
+       FROM Inventory
+       WHERE LOWER(name) LIKE LOWER($1) OR LOWER(description) LIKE LOWER($1)`,
+      [`%${query}%`]
+    );
+    return result.rows; // Return matching inventory items
+  } finally {
+    client.release();
+  }
+}

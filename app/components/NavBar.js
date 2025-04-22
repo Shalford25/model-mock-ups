@@ -1,17 +1,27 @@
 "use client";
 
 import { useContext, useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { MyContext } from "./MyContext";
 
 export default function NavBar() {
   const { account, logout, cart } = useContext(MyContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef(null);
+  const router = useRouter();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
-  
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim() !== "") {
+      router.push(`/results?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -30,13 +40,30 @@ export default function NavBar() {
       <div>
         <a href="/">
           <img
-            src="/icons/icon.png" 
+            src="/icons/icon.png"
             alt="Home"
-            className="h-12 w-auto"
+            className="h-14 w-auto"
           />
         </a>
       </div>
-      <div className="col-span-5 flex justify-end items-center relative">
+      <div className="col-span-4 flex justify-center items-center">
+        <form onSubmit={handleSearchSubmit} className="w-full max-w-md flex">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-grow px-4 py-2 border rounded-l-lg"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+      <div className="col-span-1 flex justify-end items-center relative">
         {account?.role === "user" && (
           <div className="flex items-center mr-6">
             <a href="/cart" className="flex items-center text-black">
