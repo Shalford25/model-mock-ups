@@ -97,7 +97,7 @@ export async function getInventoryBySearch(query) {
        WHERE LOWER(name) LIKE LOWER($1) OR LOWER(description) LIKE LOWER($1)`,
       [`%${query}%`]
     );
-    return result.rows; // Return matching inventory items
+    return result.rows; // Return matching inventory item
   } finally {
     client.release();
   }
